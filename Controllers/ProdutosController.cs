@@ -29,14 +29,14 @@ namespace ProdutoEstoqueApi.Controllers
         }
 
         // GET: api/Produtos/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<Produto>> GetProduto(int id)
         {
             var produto = await _context.Produtos.FindAsync(id);
 
             if (produto == null)
             {
-                return NotFound();
+                return NotFound("Produto não encontrado!");
             }
 
             return produto;
@@ -44,12 +44,12 @@ namespace ProdutoEstoqueApi.Controllers
 
         // PUT: api/Produtos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> PutProduto(int id, Produto produto)
         {
             if (id != produto.ProdutoId)
             {
-                return BadRequest();
+                return BadRequest("Ocorreu um erro. Tente novamente mais tarde.");
             }
 
             _context.Entry(produto).State = EntityState.Modified;
@@ -62,7 +62,7 @@ namespace ProdutoEstoqueApi.Controllers
             {
                 if (!ProdutoExists(id))
                 {
-                    return NotFound();
+                    return NotFound("Ocorreu um erro. Tente novamente mais tarde.");
                 }
                 else
                 {
@@ -85,7 +85,7 @@ namespace ProdutoEstoqueApi.Controllers
         }
 
         // DELETE: api/Produtos/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteProduto(int id)
         {
             var produto = await _context.Produtos.FindAsync(id);

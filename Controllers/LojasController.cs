@@ -28,8 +28,9 @@ namespace ProdutoEstoqueApi.Controllers
             return await _context.Lojas.ToListAsync();
         }
 
+
         // GET: api/Lojas/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<Loja>> GetLoja(int id)
         {
             var loja = await _context.Lojas.FindAsync(id);
@@ -44,7 +45,7 @@ namespace ProdutoEstoqueApi.Controllers
 
         // PUT: api/Lojas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> PutLoja(int id, Loja loja)
         {
             if (id != loja.LojaId)
@@ -85,7 +86,7 @@ namespace ProdutoEstoqueApi.Controllers
         }
 
         // DELETE: api/Lojas/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteLoja(int id)
         {
             var loja = await _context.Lojas.FindAsync(id);

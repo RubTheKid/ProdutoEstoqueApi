@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProdutoEstoqueApi.Context;
@@ -11,8 +12,8 @@ using ProdutoEstoqueApi.Context;
 namespace ProdutoEstoqueApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230228130145_initialMigration")]
-    partial class initialMigration
+    [Migration("20230228164633_initialMigrationSQLServer")]
+    partial class initialMigrationSQLServer
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +21,9 @@ namespace ProdutoEstoqueApi.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("ProdutoEstoqueApi.Models.ItemEstoque", b =>
                 {
@@ -28,9 +31,11 @@ namespace ProdutoEstoqueApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ItemEstoqueId"));
+
                     b.Property<string>("Nome")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("nvarchar(128)");
 
                     b.HasKey("ItemEstoqueId");
 
@@ -43,9 +48,11 @@ namespace ProdutoEstoqueApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LojaId"));
+
                     b.Property<string>("Endereco")
                         .HasMaxLength(512)
-                        .HasColumnType("varchar(512)");
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<int?>("ItemEstoqueId")
                         .HasColumnType("int");
@@ -53,7 +60,7 @@ namespace ProdutoEstoqueApi.Migrations
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("LojaId");
 
@@ -68,11 +75,13 @@ namespace ProdutoEstoqueApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProdutoId"));
+
                     b.Property<DateTime>("DataCadastro")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<float?>("Estoque")
-                        .HasColumnType("float");
+                        .HasColumnType("real");
 
                     b.Property<int?>("ItemEstoqueId")
                         .HasColumnType("int");
@@ -80,7 +89,7 @@ namespace ProdutoEstoqueApi.Migrations
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<decimal?>("Preco")
                         .IsRequired()
@@ -104,11 +113,9 @@ namespace ProdutoEstoqueApi.Migrations
 
             modelBuilder.Entity("ProdutoEstoqueApi.Models.Produto", b =>
                 {
-                    b.HasOne("ProdutoEstoqueApi.Models.ItemEstoque", "ItemEstoque")
+                    b.HasOne("ProdutoEstoqueApi.Models.ItemEstoque", null)
                         .WithMany("Produtos")
                         .HasForeignKey("ItemEstoqueId");
-
-                    b.Navigation("ItemEstoque");
                 });
 
             modelBuilder.Entity("ProdutoEstoqueApi.Models.ItemEstoque", b =>

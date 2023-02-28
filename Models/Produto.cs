@@ -22,6 +22,6 @@ public class Produto
     public DateTime DataCadastro  {get; set; }
 
    
-    //Cada loja está mapeada para um estoque
-    public ItemEstoque? ItemEstoque {get; set; }
+    //Cada produto está mapeada para um estoque
+   // public ItemEstoque? ItemEstoque {get; set; }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -7,39 +6,32 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProdutoEstoqueApi.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration : Migration
+    public partial class initialMigrationSQLServer : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
-
             migrationBuilder.CreateTable(
                 name: "ItemEstoques",
                 columns: table => new
                 {
                     ItemEstoqueId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nome = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ItemEstoques", x => x.ItemEstoqueId);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Lojas",
                 columns: table => new
                 {
                     LojaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nome = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Endereco = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Endereco = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
                     ItemEstoqueId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -50,20 +42,18 @@ namespace ProdutoEstoqueApi.Migrations
                         column: x => x.ItemEstoqueId,
                         principalTable: "ItemEstoques",
                         principalColumn: "ItemEstoqueId");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Produtos",
                 columns: table => new
                 {
                     ProdutoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nome = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Preco = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    Estoque = table.Column<float>(type: "float", nullable: true),
-                    DataCadastro = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Estoque = table.Column<float>(type: "real", nullable: true),
+                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ItemEstoqueId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -74,8 +64,7 @@ namespace ProdutoEstoqueApi.Migrations
                         column: x => x.ItemEstoqueId,
                         principalTable: "ItemEstoques",
                         principalColumn: "ItemEstoqueId");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lojas_ItemEstoqueId",

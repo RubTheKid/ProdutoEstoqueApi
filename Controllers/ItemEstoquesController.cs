@@ -29,7 +29,7 @@ namespace ProdutoEstoqueApi.Controllers
         }
 
         // GET: api/ItemEstoques/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<ItemEstoque>> GetItemEstoque(int id)
         {
             var itemEstoque = await _context.ItemEstoque.FindAsync(id);
@@ -44,7 +44,7 @@ namespace ProdutoEstoqueApi.Controllers
 
         // PUT: api/ItemEstoques/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> PutItemEstoque(int id, ItemEstoque itemEstoque)
         {
             if (id != itemEstoque.ItemEstoqueId)
@@ -85,7 +85,7 @@ namespace ProdutoEstoqueApi.Controllers
         }
 
         // DELETE: api/ItemEstoques/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteItemEstoque(int id)
         {
             var itemEstoque = await _context.ItemEstoque.FindAsync(id);
