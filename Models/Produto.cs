@@ -17,11 +17,9 @@ public class Produto
     [Column(TypeName = "decimal(10,2)")]
     public decimal? Preco { get; set; }
 
-    public float? Estoque {get; set; }
-
     public DateTime DataCadastro  {get; set; }
 
-   
-    //Cada produto está mapeada para um estoque
-   // public ItemEstoque? ItemEstoque {get; set; }
+    [InverseProperty("Produto")]
+    public ICollection<ProdutoEstoqueLoja>? ProdutoEstoqueLojas { get; set; }
+
 }

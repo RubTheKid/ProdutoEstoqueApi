@@ -12,8 +12,8 @@ using ProdutoEstoqueApi.Context;
 namespace ProdutoEstoqueApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230228164633_initialMigrationSQLServer")]
-    partial class initialMigrationSQLServer
+    [Migration("20230228211150_secondMigration")]
+    partial class secondMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,17 +54,12 @@ namespace ProdutoEstoqueApi.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
-                    b.Property<int?>("ItemEstoqueId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("LojaId");
-
-                    b.HasIndex("ItemEstoqueId");
 
                     b.ToTable("Lojas");
                 });
@@ -80,12 +75,6 @@ namespace ProdutoEstoqueApi.Migrations
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("datetime2");
 
-                    b.Property<float?>("Estoque")
-                        .HasColumnType("real");
-
-                    b.Property<int?>("ItemEstoqueId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -97,32 +86,77 @@ namespace ProdutoEstoqueApi.Migrations
 
                     b.HasKey("ProdutoId");
 
-                    b.HasIndex("ItemEstoqueId");
-
                     b.ToTable("Produtos");
                 });
 
-            modelBuilder.Entity("ProdutoEstoqueApi.Models.Loja", b =>
+            modelBuilder.Entity("ProdutoEstoqueApi.Models.ProdutoEstoqueLoja", b =>
                 {
-                    b.HasOne("ProdutoEstoqueApi.Models.ItemEstoque", "ItemEstoque")
-                        .WithMany("Lojas")
-                        .HasForeignKey("ItemEstoqueId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("ItemEstoque");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ItemEstoqueId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LojaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemEstoqueId");
+
+                    b.HasIndex("LojaId");
+
+                    b.HasIndex("ProdutoId");
+
+                    b.ToTable("ProdutoEstoqueLoja");
                 });
 
-            modelBuilder.Entity("ProdutoEstoqueApi.Models.Produto", b =>
+            modelBuilder.Entity("ProdutoEstoqueApi.Models.ProdutoEstoqueLoja", b =>
                 {
-                    b.HasOne("ProdutoEstoqueApi.Models.ItemEstoque", null)
-                        .WithMany("Produtos")
-                        .HasForeignKey("ItemEstoqueId");
+                    b.HasOne("ProdutoEstoqueApi.Models.ItemEstoque", "ItemEstoque")
+                        .WithMany("ProdutoEstoqueLojas")
+                        .HasForeignKey("ItemEstoqueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProdutoEstoqueApi.Models.Loja", "Loja")
+                        .WithMany("ProdutoEstoqueLojas")
+                        .HasForeignKey("LojaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProdutoEstoqueApi.Models.Produto", "Produto")
+                        .WithMany("ProdutoEstoqueLojas")
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ItemEstoque");
+
+                    b.Navigation("Loja");
+
+                    b.Navigation("Produto");
                 });
 
             modelBuilder.Entity("ProdutoEstoqueApi.Models.ItemEstoque", b =>
                 {
-                    b.Navigation("Lojas");
+                    b.Navigation("ProdutoEstoqueLojas");
+                });
 
-                    b.Navigation("Produtos");
+            modelBuilder.Entity("ProdutoEstoqueApi.Models.Loja", b =>
+                {
+                    b.Navigation("ProdutoEstoqueLojas");
+                });
+
+            modelBuilder.Entity("ProdutoEstoqueApi.Models.Produto", b =>
+                {
+                    b.Navigation("ProdutoEstoqueLojas");
                 });
 #pragma warning restore 612, 618
         }

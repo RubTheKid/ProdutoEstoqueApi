@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProdutoEstoqueApi.Models;
 
@@ -11,11 +12,10 @@ public class Loja
     [StringLength(256)]
     public string? Nome { get; set; }
 
-
     [StringLength(512)]
     public string? Endereco { get; set; }
 
-    //Cada loja está mapeada para um estoque
-    public ItemEstoque? ItemEstoque { get; set; }
+    [InverseProperty("Loja")]
+    public ICollection<ProdutoEstoqueLoja>? ProdutoEstoqueLojas { get; set; }
 
 }
