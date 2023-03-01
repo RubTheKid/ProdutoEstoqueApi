@@ -13,7 +13,7 @@ public class ItemEstoque
     [StringLength(128)]
     public string? Nome { get; set; }
 
-    [InverseProperty("ItemEstoque")]
-    public ICollection<ProdutoEstoqueLoja>? ProdutoEstoqueLojas { get; set; }
-    
+    public Produto? Produto { get; set; }
+
+    public Loja? Loja { get; set; }
 }

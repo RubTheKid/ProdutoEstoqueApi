@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProdutoEstoqueApi.Context;
+using ProdutoEstoqueApi.DTOs;
 using ProdutoEstoqueApi.Models;
 
 namespace ProdutoEstoqueApi.Controllers
@@ -23,23 +24,72 @@ namespace ProdutoEstoqueApi.Controllers
 
         // GET: api/ItemEstoques
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ItemEstoque>>> GetItemEstoque()
+        public async Task<List<ItemEstoque>> GetItemEstoque()
         {
-            return await _context.ItemEstoque.ToListAsync();
+            var estoque = await _context.ItemEstoque
+                .Select(ie => new ItemEstoque()
+                {
+                    ItemEstoqueId = ie.ItemEstoqueId,
+                    Nome = ie.Nome,
+                    Produto = _context.Produtos
+                        .Select(p => p)
+                        .Where(p => p == ie.Produto)
+                        .FirstOrDefault(),
+                    Loja = _context.Lojas
+                        .Select(l => l)
+                        .Where(l => l == ie.Loja)
+                        .FirstOrDefault()
+                }).ToListAsync();
+
+
+            /*var estoque = await _context.ItemEstoque
+                .Select(ie => ie)
+                .Where(ie => ie.ProdutoId == itemEstoque.ProdutoId && ie.LojaId == itemEstoque.LojaId)
+                .Select(itemEstoque => new ItemEstoque()
+                {
+                    Nome = itemEstoque.Nome,
+                    Produto = _context.Produtos
+                        .Select(p => p)
+                        .Where(p => p.ProdutoId == itemEstoque.ProdutoId)
+                        .FirstOrDefault(),
+                    Loja = _context.Lojas
+                        .Select(l => l)
+                        .Where(l => l.LojaId == itemEstoque.LojaId)
+                        .FirstOrDefault()
+                })
+                .FirstOrDefaultAsync();*/
+
+            //if (estoque == null)
+            //{
+            //    return NotFound();
+            //}
+
+            return estoque;
         }
 
         // GET: api/ItemEstoques/5
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<ItemEstoque>> GetItemEstoque(int id)
+        public async Task<ItemEstoque> GetItemEstoque(int id)
         {
-            var itemEstoque = await _context.ItemEstoque.FindAsync(id);
+            var estoque = await _context.ItemEstoque
+                .Select(ie => new ItemEstoque()
+                {
+                    ItemEstoqueId = ie.ItemEstoqueId,
+                    Nome = ie.Nome,
+                    Produto = _context.Produtos
+                        .Select(p => p)
+                        .Where(p => p == ie.Produto)
+                        .FirstOrDefault(),
+                    Loja = _context.Lojas
+                        .Select(l => l)
+                        .Where(l => l == ie.Loja)
+                        .FirstOrDefault()
 
-            if (itemEstoque == null)
-            {
-                return NotFound();
-            }
-
-            return itemEstoque;
+                })
+                .Where(ie => ie.ItemEstoqueId == id)
+                .FirstOrDefaultAsync();
+     
+            return estoque;
         }
 
         // PUT: api/ItemEstoques/5
@@ -76,13 +126,25 @@ namespace ProdutoEstoqueApi.Controllers
         // POST: api/ItemEstoques
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ItemEstoque>> PostItemEstoque(ItemEstoque itemEstoque)
+        public async Task<ActionResult<ItemEstoque>> PostItemEstoque(AddItemEstoqueDto itemEstoque)
         {
-            _context.ItemEstoque.Add(itemEstoque);
+            var estoque = new ItemEstoque()
+            {
+              Nome = itemEstoque.Nome,
+              Produto = _context.Produtos
+                        .Select(produto => produto)
+                        .Where(produto => produto.ProdutoId == itemEstoque.ProdutoId)
+                        .FirstOrDefault(),
+              Loja = _context.Lojas
+                        .Select(loja => loja)
+                        .Where(loja => loja.LojaId == itemEstoque.LojaId).FirstOrDefault()
+            };
+            _context.ItemEstoque.Add(estoque);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetItemEstoque", new { id = itemEstoque.ItemEstoqueId }, itemEstoque);
+            return CreatedAtAction("GetItemEstoque", new { id = estoque.ItemEstoqueId }, estoque);
         }
+
 
         // DELETE: api/ItemEstoques/5
         [HttpDelete("{id:int}")]

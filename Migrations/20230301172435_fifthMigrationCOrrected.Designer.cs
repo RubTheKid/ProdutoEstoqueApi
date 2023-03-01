@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProdutoEstoqueApi.Context;
 
@@ -11,9 +12,11 @@ using ProdutoEstoqueApi.Context;
 namespace ProdutoEstoqueApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230301172435_fifthMigrationCOrrected")]
+    partial class fifthMigrationCOrrected
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,26 +99,16 @@ namespace ProdutoEstoqueApi.Migrations
             modelBuilder.Entity("ProdutoEstoqueApi.Models.ItemEstoque", b =>
                 {
                     b.HasOne("ProdutoEstoqueApi.Models.Loja", "Loja")
-                        .WithMany("ItemEstoques")
+                        .WithMany()
                         .HasForeignKey("LojaId");
 
                     b.HasOne("ProdutoEstoqueApi.Models.Produto", "Produto")
-                        .WithMany("ItemEstoques")
+                        .WithMany()
                         .HasForeignKey("ProdutoId");
 
                     b.Navigation("Loja");
 
                     b.Navigation("Produto");
-                });
-
-            modelBuilder.Entity("ProdutoEstoqueApi.Models.Loja", b =>
-                {
-                    b.Navigation("ItemEstoques");
-                });
-
-            modelBuilder.Entity("ProdutoEstoqueApi.Models.Produto", b =>
-                {
-                    b.Navigation("ItemEstoques");
                 });
 #pragma warning restore 612, 618
         }
