@@ -41,34 +41,12 @@ namespace ProdutoEstoqueApi.Controllers
                         .FirstOrDefault()
                 }).ToListAsync();
 
-
-            /*var estoque = await _context.ItemEstoque
-                .Select(ie => ie)
-                .Where(ie => ie.ProdutoId == itemEstoque.ProdutoId && ie.LojaId == itemEstoque.LojaId)
-                .Select(itemEstoque => new ItemEstoque()
-                {
-                    Nome = itemEstoque.Nome,
-                    Produto = _context.Produtos
-                        .Select(p => p)
-                        .Where(p => p.ProdutoId == itemEstoque.ProdutoId)
-                        .FirstOrDefault(),
-                    Loja = _context.Lojas
-                        .Select(l => l)
-                        .Where(l => l.LojaId == itemEstoque.LojaId)
-                        .FirstOrDefault()
-                })
-                .FirstOrDefaultAsync();*/
-
-            //if (estoque == null)
-            //{
-            //    return NotFound();
-            //}
-
             return estoque;
         }
 
         // GET: api/ItemEstoques/5
         [HttpGet("{id:int}")]
+
         public async Task<ItemEstoque> GetItemEstoque(int id)
         {
             var estoque = await _context.ItemEstoque
@@ -84,7 +62,6 @@ namespace ProdutoEstoqueApi.Controllers
                         .Select(l => l)
                         .Where(l => l == ie.Loja)
                         .FirstOrDefault()
-
                 })
                 .Where(ie => ie.ItemEstoqueId == id)
                 .FirstOrDefaultAsync();

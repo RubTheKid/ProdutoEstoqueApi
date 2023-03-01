@@ -6,6 +6,16 @@ namespace ProdutoEstoqueApi.Models;
 [Table("Produtos")]
 public class Produto
 {
+    public Produto()
+    { }
+
+    public Produto( string? nome, decimal? preco)
+    {
+        Nome = nome;
+        Preco = preco;
+        DataCadastro = DateTime.Now;
+    }
+
     [Key]
     public int ProdutoId { get; set; }
 

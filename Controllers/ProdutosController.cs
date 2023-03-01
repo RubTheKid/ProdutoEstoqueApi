@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProdutoEstoqueApi.Context;
+using ProdutoEstoqueApi.DTOs;
 using ProdutoEstoqueApi.Models;
 
 namespace ProdutoEstoqueApi.Controllers
@@ -34,6 +35,7 @@ namespace ProdutoEstoqueApi.Controllers
         {
             var produto = await _context.Produtos.FindAsync(id);
 
+            
             if (produto == null)
             {
                 return NotFound("Produto não encontrado!");
@@ -52,22 +54,30 @@ namespace ProdutoEstoqueApi.Controllers
                 return BadRequest("Ocorreu um erro. Tente novamente mais tarde.");
             }
 
-            _context.Entry(produto).State = EntityState.Modified;
-
             try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
             {
                 if (!ProdutoExists(id))
                 {
-                    return NotFound("Ocorreu um erro. Tente novamente mais tarde.");
+                    return NotFound(new HttpResult
+                    {
+                        Success = false,
+                        Message = "Produto não encontrado."
+                    });
                 }
                 else
                 {
-                    throw;
+                    _context.Produtos.Update(produto);
+
+                    await _context.SaveChangesAsync();
                 }
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return BadRequest(new HttpResult
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
             }
 
             return NoContent();
@@ -76,12 +86,24 @@ namespace ProdutoEstoqueApi.Controllers
         // POST: api/Produtos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Produto>> PostProduto(Produto produto)
-        {
-            _context.Produtos.Add(produto);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetProduto", new { id = produto.ProdutoId }, produto);
+        public async Task<ActionResult<Produto>> PostProduto(AddProdutoDto produto)
+        { 
+            var p = new Produto(produto.Nome, produto.Preco);
+         
+            try
+            {
+                _context.Produtos.Add(p);
+                await _context.SaveChangesAsync();
+            } 
+            catch (Exception ex)
+            {
+                return BadRequest(new HttpResult
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
+            }
+            return CreatedAtAction("getProduto", new {id = p.ProdutoId});
         }
 
         // DELETE: api/Produtos/5
@@ -89,15 +111,28 @@ namespace ProdutoEstoqueApi.Controllers
         public async Task<IActionResult> DeleteProduto(int id)
         {
             var produto = await _context.Produtos.FindAsync(id);
+
             if (produto == null)
             {
                 return NotFound();
             }
 
-            _context.Produtos.Remove(produto);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Produtos.Remove(produto);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new HttpResult
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
+            }
 
             return NoContent();
+ 
         }
 
         private bool ProdutoExists(int id)
