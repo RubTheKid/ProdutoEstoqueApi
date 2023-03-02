@@ -32,3 +32,10 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+/*
+ * git add.
+ * git commit -m "..."
+ * git push 
+ */

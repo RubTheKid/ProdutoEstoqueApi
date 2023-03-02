@@ -9,7 +9,6 @@ namespace ProdutoEstoqueApi.DTOs
 
         public string? Nome { get; set; }
 
-        
         public decimal? Preco { get; set; }
 
         private DateTime DataCadastro { get; set; }

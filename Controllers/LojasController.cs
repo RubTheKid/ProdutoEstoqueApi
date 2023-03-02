@@ -105,6 +105,7 @@ public class LojasController : ControllerBase
         {
             return NotFound();
         }
+
         try
         {
             _context.Lojas.Remove(loja);

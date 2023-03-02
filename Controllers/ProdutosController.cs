@@ -37,7 +37,11 @@ namespace ProdutoEstoqueApi.Controllers
             
             if (produto == null)
             {
-                return NotFound("Produto não encontrado!");
+                return NotFound(new HttpResult
+                {
+                    Success = false,
+                    Message = "Produto não encontrado!"
+                }); 
             }
 
             return produto;
@@ -46,6 +50,7 @@ namespace ProdutoEstoqueApi.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> PutProduto(int id, Produto produto)
         {
+
             if (id != produto.ProdutoId)
             {
                 return BadRequest(new HttpResult
