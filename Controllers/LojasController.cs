@@ -6,104 +6,125 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProdutoEstoqueApi.Context;
+using ProdutoEstoqueApi.DTOs;
 using ProdutoEstoqueApi.Models;
 
-namespace ProdutoEstoqueApi.Controllers
+namespace ProdutoEstoqueApi.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class LojasController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class LojasController : ControllerBase
+    private readonly AppDbContext _context;
+
+    public LojasController(AppDbContext context)
     {
-        private readonly AppDbContext _context;
+        _context = context;
+    }
 
-        public LojasController(AppDbContext context)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Loja>>> GetLojas()
+    {
+        return await _context.Lojas.ToListAsync();
+    }
+
+
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<Loja>> GetLoja(int id)
+    {
+        var loja = await _context.Lojas.FindAsync(id);
+
+        if (loja == null)
         {
-            _context = context;
+            return NotFound("Loja não encontrada!");
         }
 
-        // GET: api/Lojas
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Loja>>> GetLojas()
+        return loja;
+    }
+
+
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> PutLoja(int id, Loja loja)
+    {
+        if (id != loja.LojaId)
         {
-            return await _context.Lojas.ToListAsync();
-        }
-
-
-        // GET: api/Lojas/5
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<Loja>> GetLoja(int id)
-        {
-            var loja = await _context.Lojas.FindAsync(id);
-
-            if (loja == null)
+            return BadRequest(new HttpResult
             {
-                return NotFound();
+                Success = false,
+                Message = "Ocorreu um erro. Tente novamente mais tarde."
+            });
+        }
+
+        try
+        {
+            if(!LojaExists(id))
+            {
+                return NotFound(new HttpResult
+                {
+                    Success = false,
+                    Message = "Loja não Encontrada"
+                });
             }
-
-            return loja;
-        }
-
-        // PUT: api/Lojas/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> PutLoja(int id, Loja loja)
-        {
-            if (id != loja.LojaId)
+            else
             {
-                return BadRequest();
-            }
-
-            _context.Entry(loja).State = EntityState.Modified;
-
-            try
-            {
+                _context.Lojas.Update(loja);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LojaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            if (!LojaExists(id))
+            {
+                return BadRequest(new HttpResult
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
+            }
             return NoContent();
-        }
-
-        // POST: api/Lojas
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Loja>> PostLoja(Loja loja)
-        {
-            _context.Lojas.Add(loja);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetLoja", new { id = loja.LojaId }, loja);
-        }
-
-        // DELETE: api/Lojas/5
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteLoja(int id)
-        {
-            var loja = await _context.Lojas.FindAsync(id);
-            if (loja == null)
-            {
-                return NotFound();
             }
+        return NoContent();
+    }
 
+    [HttpPost]
+    public async Task<ActionResult<Loja>> PostLoja(Loja loja)
+    {
+        _context.Lojas.Add(loja);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction("GetLoja", new { id = loja.LojaId }, loja);
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteLoja(int id)
+    {
+        var loja = await _context.Lojas.FindAsync(id);
+
+        if (loja == null)
+        {
+            return NotFound();
+        }
+        try
+        {
             _context.Lojas.Remove(loja);
             await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new HttpResult
+            {
+                Success = false,
+                Message = ex.Message
+            });
+        }
+        
 
             return NoContent();
-        }
+    }
 
         private bool LojaExists(int id)
         {
             return _context.Lojas.Any(e => e.LojaId == id);
         }
-    }
 }

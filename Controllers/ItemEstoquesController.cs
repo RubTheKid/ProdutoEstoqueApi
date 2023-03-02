@@ -22,7 +22,6 @@ namespace ProdutoEstoqueApi.Controllers
             _context = context;
         }
 
-        // GET: api/ItemEstoques
         [HttpGet]
         public async Task<List<ItemEstoque>> GetItemEstoque()
         {
@@ -44,9 +43,8 @@ namespace ProdutoEstoqueApi.Controllers
             return estoque;
         }
 
-        // GET: api/ItemEstoques/5
-        [HttpGet("{id:int}")]
 
+        [HttpGet("{id:int}")]
         public async Task<ItemEstoque> GetItemEstoque(int id)
         {
             var estoque = await _context.ItemEstoque
@@ -69,8 +67,7 @@ namespace ProdutoEstoqueApi.Controllers
             return estoque;
         }
 
-        // PUT: api/ItemEstoques/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         [HttpPut("{id:int}")]
         public async Task<IActionResult> PutItemEstoque(int id, ItemEstoque itemEstoque)
         {
@@ -100,8 +97,7 @@ namespace ProdutoEstoqueApi.Controllers
             return NoContent();
         }
 
-        // POST: api/ItemEstoques
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         [HttpPost]
         public async Task<ActionResult<ItemEstoque>> PostItemEstoque(AddItemEstoqueDto itemEstoque)
         {

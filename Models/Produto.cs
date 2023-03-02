@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProdutoEstoqueApi.Models;
 
-[Table("Produtos")]
 public class Produto
 {
     public Produto()
@@ -27,9 +26,5 @@ public class Produto
 
     public DateTime DataCadastro  {get; set; }
 
-    //[InverseProperty("Produto")]
-    //public ICollection<ItemEstoque>? ItemEstoques { get; set; }
-
- 
 
 }

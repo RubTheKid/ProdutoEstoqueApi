@@ -5,6 +5,16 @@ namespace ProdutoEstoqueApi.Models;
 
 public class Loja
 {
+    public Loja()
+    { }
+
+    public Loja ( string? nome, string? endereco)
+    {
+       
+        Nome = nome;
+        Endereco = endereco;
+    }
+
     [Key]
     public int LojaId { get; set; }
 
@@ -13,11 +23,5 @@ public class Loja
 
     [StringLength(512)]
     public string? Endereco { get; set; }
-
-    //[InverseProperty("Loja")]
-    //public ICollection<ItemEstoque>? ItemEstoques { get; set; }
-
-    //[ForeignKey("ItemEstoqueId")]
-    //public ItemEstoque? ItemEstoqueId { get; set; }
 
 }

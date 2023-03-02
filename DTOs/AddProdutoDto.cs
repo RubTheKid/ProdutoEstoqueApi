@@ -7,10 +7,6 @@ namespace ProdutoEstoqueApi.DTOs
     public class AddProdutoDto
     {
 
-        
-        //private int ProdutoId { get; set; }
-
-        
         public string? Nome { get; set; }
 
         

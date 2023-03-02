@@ -22,14 +22,13 @@ namespace ProdutoEstoqueApi.Controllers
             _context = context;
         }
 
-        // GET: api/Produtos
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Produto>>> GetProdutos()
         {
             return await _context.Produtos.ToListAsync();
         }
 
-        // GET: api/Produtos/5
+ 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Produto>> GetProduto(int id)
         {
@@ -44,14 +43,16 @@ namespace ProdutoEstoqueApi.Controllers
             return produto;
         }
 
-        // PUT: api/Produtos/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id:int}")]
         public async Task<IActionResult> PutProduto(int id, Produto produto)
         {
             if (id != produto.ProdutoId)
             {
-                return BadRequest("Ocorreu um erro. Tente novamente mais tarde.");
+                return BadRequest(new HttpResult
+                {
+                    Success = false,
+                    Message = "Ocorreu um erro. Tente novamente mais tarde."
+                });
             }
 
             try
@@ -67,7 +68,6 @@ namespace ProdutoEstoqueApi.Controllers
                 else
                 {
                     _context.Produtos.Update(produto);
-
                     await _context.SaveChangesAsync();
                 }
             }
@@ -83,8 +83,6 @@ namespace ProdutoEstoqueApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Produtos
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Produto>> PostProduto(AddProdutoDto produto)
         { 
@@ -106,7 +104,7 @@ namespace ProdutoEstoqueApi.Controllers
             return CreatedAtAction("getProduto", new {id = p.ProdutoId});
         }
 
-        // DELETE: api/Produtos/5
+
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteProduto(int id)
         {
