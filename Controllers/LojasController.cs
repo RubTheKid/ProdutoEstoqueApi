@@ -87,14 +87,29 @@ public class LojasController : ControllerBase
         return NoContent();
     }
 
+
     [HttpPost]
     public async Task<ActionResult<Loja>> PostLoja(Loja loja)
     {
-        _context.Lojas.Add(loja);
-        await _context.SaveChangesAsync();
+        var newLoja = new Loja(loja.Nome, loja.Endereco);
+
+        try
+        {
+            _context.Lojas.Add(loja);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new HttpResult
+            {
+                Success = false,
+                Message = ex.Message
+            });
+        }
 
         return CreatedAtAction("GetLoja", new { id = loja.LojaId }, loja);
     }
+
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteLoja(int id)

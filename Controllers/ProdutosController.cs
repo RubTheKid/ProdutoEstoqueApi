@@ -9,138 +9,137 @@ using ProdutoEstoqueApi.Context;
 using ProdutoEstoqueApi.DTOs;
 using ProdutoEstoqueApi.Models;
 
-namespace ProdutoEstoqueApi.Controllers
+namespace ProdutoEstoqueApi.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ProdutosController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProdutosController : ControllerBase
+    private readonly AppDbContext _context;
+
+    public ProdutosController(AppDbContext context)
     {
-        private readonly AppDbContext _context;
+        _context = context;
+    }
 
-        public ProdutosController(AppDbContext context)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Produto>>> GetProdutos()
+    {
+        return await _context.Produtos.ToListAsync();
+    }
+
+
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<Produto>> GetProduto(int id)
+    {
+        var produto = await _context.Produtos.FindAsync(id);
+
+        if (produto == null)
         {
-            _context = context;
+            return NotFound(new HttpResult
+            {
+                Success = false,
+                Message = "Produto não encontrado!"
+            }); 
+        }
+        return produto;
+    }
+
+
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> PutProduto(int id, Produto produto)
+    {
+
+        if (id != produto.ProdutoId)
+        {
+            return BadRequest(new HttpResult
+            {
+                Success = false,
+                Message = "Ocorreu um erro. Tente novamente mais tarde."
+            });
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Produto>>> GetProdutos()
+        try
         {
-            return await _context.Produtos.ToListAsync();
-        }
-
- 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<Produto>> GetProduto(int id)
-        {
-            var produto = await _context.Produtos.FindAsync(id);
-
-            
-            if (produto == null)
+            if (!ProdutoExists(id))
             {
                 return NotFound(new HttpResult
                 {
                     Success = false,
-                    Message = "Produto não encontrado!"
-                }); 
-            }
-
-            return produto;
-        }
-
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> PutProduto(int id, Produto produto)
-        {
-
-            if (id != produto.ProdutoId)
-            {
-                return BadRequest(new HttpResult
-                {
-                    Success = false,
-                    Message = "Ocorreu um erro. Tente novamente mais tarde."
+                    Message = "Produto não encontrado."
                 });
             }
-
-            try
+            else
             {
-                if (!ProdutoExists(id))
-                {
-                    return NotFound(new HttpResult
-                    {
-                        Success = false,
-                        Message = "Produto não encontrado."
-                    });
-                }
-                else
-                {
-                    _context.Produtos.Update(produto);
-                    await _context.SaveChangesAsync();
-                }
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                return BadRequest(new HttpResult
-                {
-                    Success = false,
-                    Message = ex.Message
-                });
-            }
-
-            return NoContent();
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Produto>> PostProduto(AddProdutoDto produto)
-        { 
-            var p = new Produto(produto.Nome, produto.Preco);
-         
-            try
-            {
-                _context.Produtos.Add(p);
-                await _context.SaveChangesAsync();
-            } 
-            catch (Exception ex)
-            {
-                return BadRequest(new HttpResult
-                {
-                    Success = false,
-                    Message = ex.Message
-                });
-            }
-            return CreatedAtAction("getProduto", new {id = p.ProdutoId}, produto);
-        }
-
-
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteProduto(int id)
-        {
-            var produto = await _context.Produtos.FindAsync(id);
-
-            if (produto == null)
-            {
-                return NotFound();
-            }
-
-            try
-            {
-                _context.Produtos.Remove(produto);
+                _context.Produtos.Update(produto);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
-            {
-                return BadRequest(new HttpResult
-                {
-                    Success = false,
-                    Message = ex.Message
-                });
-            }
-
-            return NoContent();
- 
         }
-
-        private bool ProdutoExists(int id)
+        catch (DbUpdateConcurrencyException ex)
         {
-            return _context.Produtos.Any(e => e.ProdutoId == id);
+            return BadRequest(new HttpResult
+            {
+                Success = false,
+                Message = ex.Message
+            });
         }
+
+        return NoContent();
+    }
+
+
+    [HttpPost]
+    public async Task<ActionResult<Produto>> PostProduto(AddProdutoDto produto)
+    { 
+        var prod = new Produto(produto.Nome, produto.Preco);
+     
+        try
+        {
+            _context.Produtos.Add(prod);
+            await _context.SaveChangesAsync();
+        } 
+        catch (Exception ex)
+        {
+            return BadRequest(new HttpResult
+            {
+                Success = false,
+                Message = ex.Message
+            });
+        }
+        return CreatedAtAction("getProduto", new {id = prod.ProdutoId}, produto);
+    }
+
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteProduto(int id)
+    {
+        var produto = await _context.Produtos.FindAsync(id);
+
+        if (produto == null)
+        {
+            return NotFound();
+        }
+
+        try
+        {
+            _context.Produtos.Remove(produto);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new HttpResult
+            {
+                Success = false,
+                Message = ex.Message
+            });
+        }
+
+        return NoContent();
+
+    }
+
+    private bool ProdutoExists(int id)
+    {
+        return _context.Produtos.Any(e => e.ProdutoId == id);
     }
 }
