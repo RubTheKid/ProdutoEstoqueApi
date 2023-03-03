@@ -106,7 +106,7 @@ namespace ProdutoEstoqueApi.Controllers
                     Message = ex.Message
                 });
             }
-            return CreatedAtAction("getProduto", new {id = p.ProdutoId});
+            return CreatedAtAction("getProduto", new {id = p.ProdutoId}, produto);
         }
 
 

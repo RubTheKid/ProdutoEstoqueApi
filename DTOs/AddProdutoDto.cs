@@ -6,7 +6,6 @@ namespace ProdutoEstoqueApi.DTOs
 {
     public class AddProdutoDto
     {
-
         public string? Nome { get; set; }
 
         public decimal? Preco { get; set; }

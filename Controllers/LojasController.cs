@@ -119,8 +119,6 @@ public class LojasController : ControllerBase
                 Message = ex.Message
             });
         }
-        
-
             return NoContent();
     }
 

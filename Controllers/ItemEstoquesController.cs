@@ -67,7 +67,6 @@ namespace ProdutoEstoqueApi.Controllers
             return estoque;
         }
 
-
         [HttpPut("{id:int}")]
         public async Task<IActionResult> PutItemEstoque(int id, ItemEstoque itemEstoque)
         {
@@ -97,7 +96,6 @@ namespace ProdutoEstoqueApi.Controllers
             return NoContent();
         }
 
-
         [HttpPost]
         public async Task<ActionResult<ItemEstoque>> PostItemEstoque(AddItemEstoqueDto itemEstoque)
         {
@@ -118,8 +116,6 @@ namespace ProdutoEstoqueApi.Controllers
             return CreatedAtAction("GetItemEstoque", new { id = estoque.ItemEstoqueId }, estoque);
         }
 
-
-        // DELETE: api/ItemEstoques/5
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteItemEstoque(int id)
         {
