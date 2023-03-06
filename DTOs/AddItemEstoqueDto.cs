@@ -6,7 +6,6 @@ namespace ProdutoEstoqueApi.DTOs
 {
     public class AddItemEstoqueDto
     {
-        [Required]
         private int ItemEstoqueId { get; set; }
 
         public string? Nome { get; set; }
