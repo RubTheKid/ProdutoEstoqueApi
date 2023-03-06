@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -45,23 +46,24 @@ public class ProdutosController : ControllerBase
         return produto;
     }
 
-
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutProduto(int id, Produto produto)
+    [DisableCors]
+    [HttpPut]
+    [Route("")]
+    public async Task<IActionResult> Put(Produto produto)
     {
 
-        if (id != produto.ProdutoId)
-        {
-            return BadRequest(new HttpResult
-            {
-                Success = false,
-                Message = "Ocorreu um erro. Tente novamente mais tarde."
-            });
-        }
+        //if (id != produto.ProdutoId)
+        //{
+        //    return BadRequest(new HttpResult
+        //    {
+        //        Success = false,
+        //        Message = "Ocorreu um erro. Tente novamente mais tarde."
+        //    });
+        //}
 
         try
         {
-            if (!ProdutoExists(id))
+            if (!ProdutoExists(produto.ProdutoId))
             {
                 return NotFound(new HttpResult
                 {
@@ -84,7 +86,7 @@ public class ProdutosController : ControllerBase
             });
         }
 
-        return NoContent();
+        return Ok(produto);
     }
 
 
