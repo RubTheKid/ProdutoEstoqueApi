@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -43,21 +44,24 @@ public class LojasController : ControllerBase
     }
 
 
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutLoja(int id, Loja loja)
+    [DisableCors]
+    [HttpPut]
+    [Route("")]
+
+    public async Task<IActionResult> Put(int id, Loja loja)
     {
-        if (id != loja.LojaId)
-        {
-            return BadRequest(new HttpResult
-            {
-                Success = false,
-                Message = "Ocorreu um erro. Tente novamente mais tarde."
-            });
-        }
+        //if (id != loja.LojaId)
+        //{
+        //    return BadRequest(new HttpResult
+        //    {
+        //        Success = false,
+        //        Message = "Ocorreu um erro. Tente novamente mais tarde."
+        //    });
+        //}
 
         try
         {
-            if(!LojaExists(id))
+            if(!LojaExists(loja.LojaId))
             {
                 return NotFound(new HttpResult
                 {
@@ -84,7 +88,8 @@ public class LojasController : ControllerBase
             }
             return NoContent();
             }
-        return NoContent();
+
+        return Ok(loja);
     }
 
 
