@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
 using ProdutoEstoqueApi.Context;
 using ProdutoEstoqueApi.DTOs;
 using ProdutoEstoqueApi.Models;
@@ -23,7 +25,9 @@ public class ProdutosController : ControllerBase
         _context = context;
     }
 
+    [Authorize]
     [HttpGet]
+    [DisableCors]
     public async Task<ActionResult<IEnumerable<Produto>>> GetProdutos()
     {
         return await _context.Produtos.ToListAsync();
