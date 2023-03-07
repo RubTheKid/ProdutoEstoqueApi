@@ -55,16 +55,6 @@ public class ProdutosController : ControllerBase
     [Route("")]
     public async Task<IActionResult> Put(Produto produto)
     {
-
-        //if (id != produto.ProdutoId)
-        //{
-        //    return BadRequest(new HttpResult
-        //    {
-        //        Success = false,
-        //        Message = "Ocorreu um erro. Tente novamente mais tarde."
-        //    });
-        //}
-
         try
         {
             if (!ProdutoExists(produto.ProdutoId))
