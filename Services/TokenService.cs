@@ -12,8 +12,8 @@ public class TokenService : ITokenService
     {
         var claims = new[]
         {
-            new Claim("username",user.Username)//,
-            //new Claim(ClaimTypes.NameIdentifier,Guid.NewGuid().ToString())
+            new Claim("username",user.Username),
+            new Claim(ClaimTypes.NameIdentifier,Guid.NewGuid().ToString())
         };
 
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
