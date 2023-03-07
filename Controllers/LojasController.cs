@@ -50,15 +50,6 @@ public class LojasController : ControllerBase
 
     public async Task<IActionResult> Put(int id, Loja loja)
     {
-        //if (id != loja.LojaId)
-        //{
-        //    return BadRequest(new HttpResult
-        //    {
-        //        Success = false,
-        //        Message = "Ocorreu um erro. Tente novamente mais tarde."
-        //    });
-        //}
-
         try
         {
             if(!LojaExists(loja.LojaId))
