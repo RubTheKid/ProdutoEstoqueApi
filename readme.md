@@ -1,5 +1,7 @@
 # App Gerenciamento de estoque
 
+-ainda em desenvolvimento-
+
 ## Download e execução do sistema
 
 É necessario baixar o repositório `ProdutoEstoqueApi` e `ControleEstoqueApp`.
