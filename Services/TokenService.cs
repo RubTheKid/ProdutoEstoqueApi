@@ -8,12 +8,12 @@ namespace ProdutoEstoqueApi.Services;
 
 public class TokenService : ITokenService
 {
-    public string GetToken(string key, string issuer, string audience, UserModel user)
+    public string GetToken(string key, string issuer, string audience, Usuarios user)
     {
         var claims = new[]
         {
-            new Claim("username",user.Username),
-            new Claim(ClaimTypes.NameIdentifier,Guid.NewGuid().ToString())
+            new Claim("username",user.Username)//,
+            //new Claim(ClaimTypes.NameIdentifier,Guid.NewGuid().ToString())
         };
 
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));

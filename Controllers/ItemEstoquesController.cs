@@ -104,6 +104,7 @@ namespace ProdutoEstoqueApi.Controllers
             var estoque = new ItemEstoque()
             {
               Nome = itemEstoque.Nome,
+                QuantidadeEstoque = itemEstoque.QuantidadeEstoque,
               Produto = _context.Produtos
                         .Select(produto => produto)
                         .Where(produto => produto.ProdutoId == itemEstoque.ProdutoId)

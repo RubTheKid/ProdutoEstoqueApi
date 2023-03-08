@@ -16,7 +16,9 @@ public class ItemEstoque
     public Produto? Produto { get; set; }
 
     public Loja? Loja { get; set; }
-    
+
+    public int? QuantidadeEstoque { get; set; }
+
     [ForeignKey ("ProdutoId")]
     public int ProdutoId { get; set; }
     

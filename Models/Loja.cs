@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProdutoEstoqueApi.Models;
 
+[Table("Lojas")]
 public class Loja
 {
     public Loja()

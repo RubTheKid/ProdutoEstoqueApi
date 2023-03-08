@@ -15,4 +15,6 @@ public class AppDbContext : DbContext
     public DbSet<Loja> Lojas { get; set; }
     public DbSet<ItemEstoque> ItemEstoque { get; set; }
 
+    public virtual DbSet<Usuarios> Usuarios { get; set; }
+
 }

@@ -40,6 +40,9 @@ namespace ProdutoEstoqueApi.Migrations
                     b.Property<int>("ProdutoId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("QuantidadeEstoque")
+                        .HasColumnType("int");
+
                     b.HasKey("ItemEstoqueId");
 
                     b.HasIndex("LojaId");
@@ -91,6 +94,29 @@ namespace ProdutoEstoqueApi.Migrations
                     b.HasKey("ProdutoId");
 
                     b.ToTable("Produtos");
+                });
+
+            modelBuilder.Entity("ProdutoEstoqueApi.Models.Usuarios", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("ProdutoEstoqueApi.Models.ItemEstoque", b =>

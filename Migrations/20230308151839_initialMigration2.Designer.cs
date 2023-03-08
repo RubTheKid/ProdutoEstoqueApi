@@ -12,8 +12,8 @@ using ProdutoEstoqueApi.Context;
 namespace ProdutoEstoqueApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230228211150_secondMigration")]
-    partial class secondMigration
+    [Migration("20230308151839_initialMigration2")]
+    partial class initialMigration2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,11 +33,24 @@ namespace ProdutoEstoqueApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ItemEstoqueId"));
 
+                    b.Property<int>("LojaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nome")
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("QuantidadeEstoque")
+                        .HasColumnType("int");
+
                     b.HasKey("ItemEstoqueId");
+
+                    b.HasIndex("LojaId");
+
+                    b.HasIndex("ProdutoId");
 
                     b.ToTable("ItemEstoques");
                 });
@@ -55,7 +68,6 @@ namespace ProdutoEstoqueApi.Migrations
                         .HasColumnType("nvarchar(512)");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -76,12 +88,10 @@ namespace ProdutoEstoqueApi.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<decimal?>("Preco")
-                        .IsRequired()
                         .HasColumnType("decimal(10,2)");
 
                     b.HasKey("ProdutoId");
@@ -89,74 +99,46 @@ namespace ProdutoEstoqueApi.Migrations
                     b.ToTable("Produtos");
                 });
 
-            modelBuilder.Entity("ProdutoEstoqueApi.Models.ProdutoEstoqueLoja", b =>
+            modelBuilder.Entity("ProdutoEstoqueApi.Models.Usuarios", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
-                    b.Property<int>("ItemEstoqueId")
-                        .HasColumnType("int");
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("LojaId")
-                        .HasColumnType("int");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("ProdutoId")
-                        .HasColumnType("int");
+                    b.HasKey("UserId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemEstoqueId");
-
-                    b.HasIndex("LojaId");
-
-                    b.HasIndex("ProdutoId");
-
-                    b.ToTable("ProdutoEstoqueLoja");
+                    b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("ProdutoEstoqueApi.Models.ProdutoEstoqueLoja", b =>
+            modelBuilder.Entity("ProdutoEstoqueApi.Models.ItemEstoque", b =>
                 {
-                    b.HasOne("ProdutoEstoqueApi.Models.ItemEstoque", "ItemEstoque")
-                        .WithMany("ProdutoEstoqueLojas")
-                        .HasForeignKey("ItemEstoqueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ProdutoEstoqueApi.Models.Loja", "Loja")
-                        .WithMany("ProdutoEstoqueLojas")
+                        .WithMany()
                         .HasForeignKey("LojaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProdutoEstoqueApi.Models.Produto", "Produto")
-                        .WithMany("ProdutoEstoqueLojas")
+                        .WithMany()
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ItemEstoque");
-
                     b.Navigation("Loja");
 
                     b.Navigation("Produto");
-                });
-
-            modelBuilder.Entity("ProdutoEstoqueApi.Models.ItemEstoque", b =>
-                {
-                    b.Navigation("ProdutoEstoqueLojas");
-                });
-
-            modelBuilder.Entity("ProdutoEstoqueApi.Models.Loja", b =>
-                {
-                    b.Navigation("ProdutoEstoqueLojas");
-                });
-
-            modelBuilder.Entity("ProdutoEstoqueApi.Models.Produto", b =>
-                {
-                    b.Navigation("ProdutoEstoqueLojas");
                 });
 #pragma warning restore 612, 618
         }

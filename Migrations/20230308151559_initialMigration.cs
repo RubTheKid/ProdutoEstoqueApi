@@ -6,31 +6,18 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProdutoEstoqueApi.Migrations
 {
     /// <inheritdoc />
-    public partial class secondMigration : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "ItemEstoques",
-                columns: table => new
-                {
-                    ItemEstoqueId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ItemEstoques", x => x.ItemEstoqueId);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Lojas",
                 columns: table => new
                 {
                     LojaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Endereco = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true)
                 },
                 constraints: table =>
@@ -44,8 +31,8 @@ namespace ProdutoEstoqueApi.Migrations
                 {
                     ProdutoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Preco = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Preco = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -54,32 +41,27 @@ namespace ProdutoEstoqueApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProdutoEstoqueLoja",
+                name: "ItemEstoques",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProdutoId = table.Column<int>(type: "int", nullable: false),
-                    LojaId = table.Column<int>(type: "int", nullable: false),
                     ItemEstoqueId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    QuantidadeEstoque = table.Column<int>(type: "int", nullable: true),
+                    ProdutoId = table.Column<int>(type: "int", nullable: false),
+                    LojaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProdutoEstoqueLoja", x => x.Id);
+                    table.PrimaryKey("PK_ItemEstoques", x => x.ItemEstoqueId);
                     table.ForeignKey(
-                        name: "FK_ProdutoEstoqueLoja_ItemEstoques_ItemEstoqueId",
-                        column: x => x.ItemEstoqueId,
-                        principalTable: "ItemEstoques",
-                        principalColumn: "ItemEstoqueId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProdutoEstoqueLoja_Lojas_LojaId",
+                        name: "FK_ItemEstoques_Lojas_LojaId",
                         column: x => x.LojaId,
                         principalTable: "Lojas",
                         principalColumn: "LojaId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProdutoEstoqueLoja_Produtos_ProdutoId",
+                        name: "FK_ItemEstoques_Produtos_ProdutoId",
                         column: x => x.ProdutoId,
                         principalTable: "Produtos",
                         principalColumn: "ProdutoId",
@@ -87,27 +69,19 @@ namespace ProdutoEstoqueApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProdutoEstoqueLoja_ItemEstoqueId",
-                table: "ProdutoEstoqueLoja",
-                column: "ItemEstoqueId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProdutoEstoqueLoja_LojaId",
-                table: "ProdutoEstoqueLoja",
+                name: "IX_ItemEstoques_LojaId",
+                table: "ItemEstoques",
                 column: "LojaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProdutoEstoqueLoja_ProdutoId",
-                table: "ProdutoEstoqueLoja",
+                name: "IX_ItemEstoques_ProdutoId",
+                table: "ItemEstoques",
                 column: "ProdutoId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "ProdutoEstoqueLoja");
-
             migrationBuilder.DropTable(
                 name: "ItemEstoques");
 

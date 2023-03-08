@@ -4,5 +4,5 @@ namespace ProdutoEstoqueApi.Services;
 
 public interface ITokenService
 {
-    string GetToken(string key, string issuer, string audience, UserModel user);
+    string GetToken(string key, string issuer, string audience, Usuarios user);
 }
