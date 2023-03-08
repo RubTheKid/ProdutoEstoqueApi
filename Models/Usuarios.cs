@@ -13,6 +13,7 @@ public class Usuarios
     [StringLength(50)]
     [Required]
     [NotNull]
+    [Key]
     public string Username { get; set; }
 
     [StringLength(50)]
