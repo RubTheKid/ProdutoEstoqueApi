@@ -27,5 +27,4 @@ Já o app foi criado com razor pages, realizando as ações `GET`, `POST`, `PUT`
 
 1. As ações da tabela estoque não estão funcionais, pois foram feitas alterações no
 decorrer do desenvolvimento que afetaram no funcionamento da mesma.
-2. A autenticação por JWT também não foi implementada (ainda), devido a falta de tempo hábil.
-3. Testes unitários também não foram realizados, por falta de tempo hábil.
+2. Testes unitários também não foram realizados, por falta de tempo hábil.
