@@ -29,7 +29,6 @@ public class LojasController : ControllerBase
         return await _context.Lojas.ToListAsync();
     }
 
-
     [HttpGet("{id:int}")]
     public async Task<ActionResult<Loja>> GetLoja(int id)
     {
@@ -43,11 +42,9 @@ public class LojasController : ControllerBase
         return loja;
     }
 
-
     [DisableCors]
     [HttpPut]
     [Route("")]
-
     public async Task<IActionResult> Put(int id, Loja loja)
     {
         try
@@ -83,7 +80,6 @@ public class LojasController : ControllerBase
         return Ok(loja);
     }
 
-
     [HttpPost]
     public async Task<ActionResult<Loja>> PostLoja(Loja loja)
     {
@@ -105,7 +101,6 @@ public class LojasController : ControllerBase
 
         return CreatedAtAction("GetLoja", new { id = loja.LojaId }, loja);
     }
-
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteLoja(int id)

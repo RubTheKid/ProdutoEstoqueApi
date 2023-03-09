@@ -7,10 +7,7 @@ namespace ProdutoEstoqueApi.DTOs
     public class AddProdutoDto
     {
         public string? Nome { get; set; }
-
         public decimal? Preco { get; set; }
-
         private DateTime DataCadastro { get; set; }
-
     }
 }

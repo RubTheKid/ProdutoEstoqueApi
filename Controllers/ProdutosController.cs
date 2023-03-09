@@ -25,14 +25,11 @@ public class ProdutosController : ControllerBase
         _context = context;
     }
 
-    
     [HttpGet]
-    
     public async Task<ActionResult<IEnumerable<Produto>>> GetProdutos()
     {
         return await _context.Produtos.ToListAsync();
     }
-
 
     [HttpGet("{id:int}")]
     public async Task<ActionResult<Produto>> GetProduto(int id)
@@ -83,7 +80,6 @@ public class ProdutosController : ControllerBase
         return Ok(produto);
     }
 
-
     [HttpPost]
     public async Task<ActionResult<Produto>> PostProduto(AddProdutoDto produto)
     { 
@@ -104,7 +100,6 @@ public class ProdutosController : ControllerBase
         }
         return CreatedAtAction("getProduto", new {id = prod.ProdutoId}, produto);
     }
-
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteProduto(int id)
@@ -133,7 +128,6 @@ public class ProdutosController : ControllerBase
         return NoContent();
 
     }
-
     private bool ProdutoExists(int id)
     {
         return _context.Produtos.Any(e => e.ProdutoId == id);

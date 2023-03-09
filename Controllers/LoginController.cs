@@ -17,24 +17,11 @@ public class LoginController : ControllerBase
 {
     private readonly UserCurrent[] _users =
     {
-        new UserCurrent {Password = "senha123", Username = "jadercardoso",
-            FirstName = "Jader", Claim = new Claim("Home", "Default")},
         new UserCurrent { Username = "admin", Password = "admin",
             FirstName = "Admin", Claim = new Claim("Home", "Admin")}
     };
     private AuthConfiguration _confAuth = new AuthConfiguration().GetInstance();
-    [Authorize(Roles = "Admin")]
-    [HttpGet("role-admin")]
-    public ActionResult Admin()
-    {
-        return Ok();
-    }
-    [Authorize(Roles = "Default")]
-    [HttpGet("role-default")]
-    public ActionResult Default()
-    {
-        return Ok();
-    }
+   
     [AllowAnonymous]
     [HttpPost("login")]
     public ActionResult Login(Usuarios usuario)
@@ -51,7 +38,6 @@ public class LoginController : ControllerBase
             Success = true,
             Token = GenerateToke(user).Result
         });
-
     }
 
     private async Task<string> GenerateToke(UserCurrent user)
